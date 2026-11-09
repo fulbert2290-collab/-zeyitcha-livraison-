@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f07816">
+<title>ZÉYITCHA LIVRAISON</title>
+<style>
+:root {
+  --orange:#f07816;
+  --dark:#17212b;
+  --light:#f5f6f8;
+  --green:#16864b;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--light);
+  color:var(--dark);
+}
+header {
+  background:var(--orange);
+  color:white;
+  padding:22px 16px;
+  text-align:center;
+}
+header h1 { margin:0 0 6px; font-size:25px; }
+header p { margin:0; font-size:13px; }
+nav {
+  display:flex;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:5;
+  box-shadow:0 2px 8px #0001;
+}
+nav button {
+  flex:1;
+  border:0;
+  padding:15px 4px;
+  background:white;
+  font-weight:bold;
+  color:#555;
+  cursor:pointer;
+}
+nav button.active {
+  color:var(--orange);
+  border-bottom:3px solid var(--orange);
+}
+main { max-width:650px; margin:auto; padding:16px; }
+.card {
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 3px 12px #0000000b;
+}
+h2 { margin-top:0; font-size:20px; }
+label {
+  display:block;
+  margin:13px 0 6px;
+  font-weight:bold;
+  font-size:14px;
+}
+input,select,textarea {
+  width:100%;
+  padding:13px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  font-size:15px;
+  background:white;
+}
+textarea { min-height:80px; resize:vertical; }
+.primary {
+  width:100%;
+  border:0;
+  border-radius:9px;
+  background:var(--orange);
+  color:white;
+  padding:14px;
+  font-size:16px;
+  font-weight:bold;
+  margin-top:16px;
+  cursor:pointer;
+}
+.secondary {
+  border:0;
+  border-radius:8px;
+  background:#edf0f3;
+  padding:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.order {
+  border:1px solid #eee;
+  border-radius:10px;
+  padding:13px;
+  margin-top:12px;
+}
+.order p { margin:7px 0; font-size:14px; }
+.status {
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#fff0df;
+  color:#a95000;
+  font-size:12px;
+  font-weight:bold;
+}
+.green { background:#e3f7eb; color:#14723d; }
+.hidden { display:none; }
+.small { color:#68727c; font-size:12px; line-height:1.5; }
+footer {
+  text-align:center;
+  padding:25px 12px;
+  color:#777;
+  font-size:12px;
+}
+a.contact {
+  display:block;
+  text-decoration:none;
+  text-align:center;
+  background:var(--green);
+  color:white;
+  padding:13px;
+  border-radius:9px;
+  font-weight:bold;
+  margin-top:12px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚚 ZÉYITCHA LIVRAISON</h1>
+  <p>Vos colis, vos courses et vos repas livrés simplement.</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('client',this)">Client</button>
+  <button onclick="showTab('livreur',this)">Livreur</button>
+  <button onclick="showTab('admin',this)">Admin</button>
+</nav>
+
+<main>
+
+<section id="client">
+  <div class="card">
+    <h2>📦 Passer une commande</h2>
+    <p class="small">Remplissez les informations pour demander une livraison.</p>
+
+    <form id="orderForm">
+      <label>Type de service</label>
+      <select id="type" required>
+        <option value="Livraison de colis">Livraison de colis</option>
+        <option value="Courses et achats">Courses et achats</option>
+        <option value="Repas">Livraison de repas</option>
+      </select>
+
+      <label>Votre nom</label>
+      <input id="name" required placeholder="Votre nom complet">
+
+      <label>Votre numéro de téléphone</label>
+      <input id="phone" type="tel" required placeholder="Ex : 0190000000">
+
+      <label>Adresse de récupération</label>
+      <input id="pickup" required placeholder="Quartier, repère...">
+
+      <label>Adresse de livraison</label>
+      <input id="dropoff" required placeholder="Quartier, repère...">
+
+      <label>Informations supplémentaires</label>
+      <textarea id="details" placeholder="Décrivez votre colis ou vos achats..."></textarea>
+
+      <button class="primary" type="submit">Envoyer ma demande</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>📞 Besoin d'aide ?</h2>
+    <p>Contactez notre équipe pour confirmer votre commande et son tarif.</p>
+    <a class="contact" href="https://wa.me/2290191155686" target="_blank">
+      Contacter ZÉYITCHA sur WhatsApp
+    </a>
+  </div>
+</section>
+
+<section id="livreur" class="hidden">
+  <div class="card">
+    <h2>🏍️ Espace livreur</h2>
+    <p class="small">Consultez les commandes enregistrées sur cet appareil et actualisez leur statut.</p>
+    <div id="driverOrders"></div>
+  </div>
+</section>
+
+<section id="admin" class="hidden">
+  <div class="card">
+    <h2>👨‍💼 Tableau de bord</h2>
+    <p id="totalOrders">Commandes : 0</p>
+    <p id="pendingOrders">En attente : 0</p>
+    <div id="adminOrders"></div>
+    <button class="secondary" onclick="exportOrders()">Exporter les commandes</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  © 2026 ZÉYITCHA LIVRAISON · Abomey-Calavi & Cotonou<br>
+  Contact : +229 01 91 15 56 86
+</footer>
+
+<script>
+const STORAGE_KEY = "zeyitcha_demo_orders";
+
+function getOrders() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+}
+
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function showTab(tab, button) {
+  ["client","livreur","admin"].forEach(id => {
+    document.getElementById(id).classList.toggle("hidden", id !== tab);
+  });
+  document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
+  button.classList.add("active");
+  refresh();
+}
+
+document.getElementById("orderForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const order = {
+    id: "ZY" + Date.now().toString().slice(-8),
+    type: document.getElementById("type").value,
+    name: document.getElementById("name").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    pickup: document.getElementById("pickup").value.trim(),
+    dropoff: document.getElementById("dropoff").value.trim(),
+    details: document.getElementById("details").value.trim(),
+    status: "En attente",
+    date: new Date().toLocaleString("fr-FR")
+  };
+
+  const orders = getOrders();
+  orders.unshift(order);
+  saveOrders(orders);
+
+  alert("Demande enregistrée sur cet appareil ! Contactez ZÉYITCHA pour confirmer.");
+  this.reset();
+  refresh();
+});
+
+function orderCard(order, allowUpdate) {
+  return `
+    <div class="order">
+      <strong>${safe(order.type)}</strong>
+      <p>Référence : ${safe(order.id)}</p>
+      <p>Client : ${safe(order.name)} · ${safe(order.phone)}</p>
+      <p>Départ : ${safe(order.pickup)}</p>
+      <p>Arrivée : ${safe(order.dropoff)}</p>
+      <p>Détails : ${safe(order.details || "Aucun")}</p>
+      <p>Date : ${safe(order.date)}</p>
+      <span class="status ${order.status === "Livrée" ? "green" : ""}">
+        ${safe(order.status)}
+      </span>
+      ${allowUpdate ? `
+        <label>Modifier le statut</label>
+        <select onchange="updateStatus('${safe(order.id)}',this.value)">
+          ${["En attente","Acceptée","En cours de livraison","Livrée","Annulée"].map(s =>
+            `<option ${order.status === s ? "selected" : ""}>${s}</option>`
+          ).join("")}
+        </select>` : ""}
+    </div>`;
+}
+
+function updateStatus(id, status) {
+  const orders = getOrders().map(order =>
+    order.id === id ? {...order, status} : order
+  );
+  saveOrders(orders);
+  refresh();
+}
+
+function refresh() {
+  const orders = getOrders();
+  document.getElementById("driverOrders").innerHTML =
+    orders.length ? orders.map(o => orderCard(o,true)).join("") :
+    "<p>Aucune commande enregistrée sur cet appareil.</p>";
+
+  document.getElementById("adminOrders").innerHTML =
+    orders.length ? orders.map(o => orderCard(o,false)).join("") :
+    "<p>Aucune commande pour le moment.</p>";
+
+  document.getElementById("totalOrders").textContent = "Commandes : " + orders.length;
+  document.getElementById("pendingOrders").textContent =
+    "En attente : " + orders.filter(o => o.status === "En attente").length;
+}
+
+function exportOrders() {
+  const orders = getOrders();
+  const blob = new Blob(
+    [JSON.stringify(orders,null,2)],
+    {type:"application/json"}
+  );
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "commandes-zeyitcha.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+refresh();
+</script>
+</body>
+</html>
